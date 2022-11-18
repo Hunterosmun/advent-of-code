@@ -1,5 +1,5 @@
 const fs = require('fs')
-const santasList = fs.readFileSync('list.txt', 'utf-8')
+const santasList = fs.readFileSync(__dirname + '/list.txt', 'utf-8')
 const assert = require('assert')
 
 const ex1 = `

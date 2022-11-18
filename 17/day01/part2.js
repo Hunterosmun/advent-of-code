@@ -1,5 +1,5 @@
 const fs = require('fs')
-const santasList = fs.readFileSync('list.txt', 'utf-8')
+const santasList = fs.readFileSync(__dirname + '/list.txt', 'utf-8')
 const assert = require('assert')
 
 //
@@ -7,6 +7,30 @@ const assert = require('assert')
 // Part 2
 //
 //
+
+function main (list) {
+  const parsedList = list
+    .trim()
+    .split('')
+    .map(s => +s)
+
+  return parsedList.reduce((acc, el, i) => {
+    const halfAbout = i + parsedList.length / 2
+    if (parsedList[halfAbout] && el === parsedList[halfAbout]) {
+      return acc + el + el
+    }
+    return acc
+  }, 0)
+}
+
+assert.strictEqual(main('1212'), 6)
+assert.strictEqual(main('1221'), 0)
+assert.strictEqual(main('123425'), 4)
+assert.strictEqual(main('123123'), 12)
+assert.strictEqual(main('12131415'), 4)
+assert.strictEqual(main(santasList), 1194)
+
+// OLD Attempt (it DOES work... but I redid it :) )
 
 function jumpParse (list) {
   const parsedList = list.trim().split('')
