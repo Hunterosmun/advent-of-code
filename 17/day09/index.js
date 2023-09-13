@@ -115,3 +115,27 @@ assert.equal(part1(exampleInput2), 16)
 assert.equal(part1(exampleInput3), 9)
 assert.equal(part1(exampleInput4), 3)
 assert.equal(part1(input), 21037)
+
+// ---- part2 ----
+
+const exampleInput5 = '{<{o"i!a,<{i<a>}'
+
+function part2 (text) {
+  const beforeTrash = text.trim().split(/!./).join('').length
+
+  const afterTrash = text
+    .trim()
+    .split(/!./)
+    .join('')
+    .split(/<[^>]*>/)
+    .join('<>').length
+
+  return beforeTrash - afterTrash
+}
+
+assert.equal(part2(exampleInput1), 0)
+assert.equal(part2(exampleInput2), 0)
+assert.equal(part2(exampleInput3), 0)
+assert.equal(part2(exampleInput4), 17)
+assert.equal(part2(exampleInput5), 10)
+assert.equal(part2(input), 9495)
