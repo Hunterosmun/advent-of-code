@@ -30,19 +30,20 @@ Your goal is to find the total score for all groups in your input. Each group is
 
 */
 
-function main (text) {
+function part1 (text) {
   const chars = text
     .trim()
     .split(/!./)
     .join('')
-    .split(/<.*>/)
+    .split(/<[^>]*>/)
     .join('')
     .split('')
 
   const groups = parseGroups(chars)
 
-  console.log('--------------')
-  console.log(JSON.stringify(groups, null, 2))
+  getScores(groups)
+
+  return addScores(groups)
 }
 
 // let groups = {}
@@ -81,13 +82,36 @@ function parseGroups (letters, parentTrail = [], groups = {}) {
   return parseGroups(letters, parentTrail, groups)
 }
 
-// main(input)
-// main('<!!!>>{{}}{!}{}!}}')
+function getScores (groups, parentScore = 0) {
+  // console.log(groups)
+  Object.values(groups).map(group => {
+    group.score = parentScore + 1
+    if (group?.children) {
+      getScores(group.children, group.score)
+      // group.score = Object.values(group.children).reduce(
+      //   (score, child) => child.score + score,
+      //   1
+      // )
+    }
+    // if (Object?.values(groups)?.length) {
+    //   Object.values(groups).map(g => getScores(g))
+    // }
+    return 0
+  })
+}
 
-main(exampleInput1)
-main(exampleInput2)
-main(exampleInput3)
-main(exampleInput4)
+function addScores (groups) {
+  return Object.values(groups).reduce((acc, group) => {
+    if (group.children) {
+      return addScores(group.children) + group.score + acc
+    } else {
+      return group.score + acc
+    }
+  }, 0)
+}
 
-// assert.deepStrictEqual(main(exampleInput1), { answer: 1, highestNum: 10 })
-// assert.deepStrictEqual(main(input), { answer: 4888, highestNum: 7774 })
+assert.equal(part1(exampleInput1), 5)
+assert.equal(part1(exampleInput2), 16)
+assert.equal(part1(exampleInput3), 9)
+assert.equal(part1(exampleInput4), 3)
+assert.equal(part1(input), 21037)
