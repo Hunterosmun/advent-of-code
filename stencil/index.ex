@@ -16,20 +16,20 @@ end
 
 case Day_one.part_one(ex1) do
   "answer here" -> nil
-  _ -> IO.inspect("part 1 example incorrect")
+  resp -> IO.inspect("part 1 example incorrect, recieved: #{resp}")
 end
 
 case Day_one.part_one(santas_list) do
   "answer here" -> IO.inspect("part 1 complete!")
-  _ -> IO.inspect("Part 1 incorrect")
+  resp -> IO.inspect("part 1 incorrect, recieved: #{resp}")
 end
 
 case Day_one.part_two(ex1) do
   "answer here" -> nil
-  _ -> IO.inspect("part 2 example incorrect")
+  resp -> IO.inspect("part 2 example incorrect, recieved: #{resp}")
 end
 
 case Day_one.part_two(santas_list) do
   "answer here" -> IO.inspect("part 2 complete!")
-  _ -> IO.inspect("Part 2 incorrect")
+  resp -> IO.inspect("part 2 incorrect, recieved: #{resp}")
 end
