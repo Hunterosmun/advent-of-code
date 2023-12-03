@@ -84,8 +84,6 @@ case Day_one.part_two(ex2) do
   resp -> IO.inspect("part 2 example incorrect, got: #{resp}")
 end
 
-# 53363 is too high.
-# 53345 also too high.
 case Day_one.part_two(santas_list) do
   53340 -> IO.inspect("part 2 complete!")
   resp -> IO.inspect("part 2 example incorrect, got: #{resp}")
