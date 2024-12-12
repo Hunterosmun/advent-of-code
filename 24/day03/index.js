@@ -20,25 +20,44 @@ assert.strictEqual(main(ex1), 161)
 assert.strictEqual(main(santasList), 166630675)
 
 // Janky but works. Probs should retry with a better approach XD
+// function partTwo(input) {
+//   const okAreas = input.matchAll(/do\(\)/g)
+//   const fullCords = { startCords: [0], endCords: [] }
+//   for (const area of okAreas) fullCords.startCords.push(area.index)
+
+//   const badAreas = input.matchAll(/don't\(\)/g)
+//   for (const area of badAreas) fullCords.endCords.push(area.index)
+
+//   const cutCords = fullCords.startCords.reduce((acc, start, i) => {
+//     if (!acc.length) return [{ start: start, end: fullCords.endCords[i] }]
+//     if (start < acc[acc.length - 1].end) return acc
+//     const end = fullCords.endCords.find((n) => n > start) ?? input.length
+//     acc.push({ start, end })
+//     return acc
+//   }, [])
+
+//   let str = ''
+//   for (const { start, end } of cutCords) str += input.slice(start, end)
+//   return main(str)
+// }
+
 function partTwo(input) {
-  const okAreas = input.matchAll(/do\(\)/g)
-  const fullCords = { startCords: [0], endCords: [] }
-  for (const area of okAreas) fullCords.startCords.push(area.index)
-
-  const badAreas = input.matchAll(/don't\(\)/g)
-  for (const area of badAreas) fullCords.endCords.push(area.index)
-
-  const cutCords = fullCords.startCords.reduce((acc, start, i) => {
-    if (!acc.length) return [{ start: start, end: fullCords.endCords[i] }]
-    if (start < acc[acc.length - 1].end) return acc
-    const end = fullCords.endCords.find((n) => n > start) ?? input.length
-    acc.push({ start, end })
-    return acc
-  }, [])
-
-  let str = ''
-  for (const { start, end } of cutCords) str += input.slice(start, end)
-  return main(str)
+  let active = true
+  return input
+    .match(/mul\((\d+),(\d+)\)|don't\(\)|do\(\)/g)
+    .reduce((acc, el) => {
+      if (el === "don't()") {
+        active = false
+        return acc
+      }
+      if (el === 'do()') {
+        active = true
+        return acc
+      }
+      if (!active) return acc
+      const [_, num1, num2] = el.match(/mul\((\d+),(\d+)\)/).map(Number)
+      return acc + num1 * num2
+    }, 0)
 }
 
 assert.strictEqual(partTwo(ex2), 48)
