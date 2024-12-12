@@ -35,21 +35,19 @@ function main(input) {
   Object.keys(satelites).forEach((key) => {
     const satelite = satelites[key]
     satelite.map((sat, i) => {
-      for (let a = 0; a < satelite.length; a++) {
-        if (a === i) continue
+      for (let a = i + 1; a < satelite.length; a++) {
         const other = satelite[a]
         const xDiff = sat.x - other.x
         const yDiff = sat.y - other.y
-        console.log({ sat, other, xDiff, yDiff })
-        // We can optimize by vhecking other - dif then not looping over sat ever again
         if (grid[sat.y + yDiff]?.[sat.x + xDiff]) {
           triggeredAreas[`${sat.x + xDiff},${sat.y + yDiff}`] = true
         }
+        if (grid[other.y - yDiff]?.[other.x - xDiff]) {
+          triggeredAreas[`${other.x - xDiff},${other.y - yDiff}`] = true
+        }
       }
-      //
     })
   })
-  console.log(triggeredAreas)
   return Object.keys(triggeredAreas).length
 }
 
@@ -62,7 +60,3 @@ function partTwo(input) {
 
 assert.strictEqual(partTwo(ex1), 'answer')
 assert.strictEqual(partTwo(santasList), 'answer')
-
-function helper(input) {
-  // stuff here
-}
