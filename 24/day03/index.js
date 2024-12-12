@@ -46,12 +46,8 @@ function partTwo(input) {
   return input
     .match(/mul\((\d+),(\d+)\)|don't\(\)|do\(\)/g)
     .reduce((acc, el) => {
-      if (el === "don't()") {
-        active = false
-        return acc
-      }
-      if (el === 'do()') {
-        active = true
+      if (["don't()", 'do()'].includes(el)) {
+        active = el === 'do()'
         return acc
       }
       if (!active) return acc
