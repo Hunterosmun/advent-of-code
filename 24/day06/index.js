@@ -92,7 +92,6 @@ assert.strictEqual(main(ex1), 41)
 assert.strictEqual(main(santasList), 5199)
 
 function partTwo(input) {
-  // Takes too long. Need to optimize
   const map = input
     .trim()
     .split('\n')
@@ -101,7 +100,7 @@ function partTwo(input) {
   let numLoops = 0
   map.forEach((row, i) => {
     row.forEach((_el, j) => {
-      const newMap = JSON.parse(JSON.stringify(map))
+      const newMap = structuredClone(map)
       if (['#', '^'].includes(newMap[i][j])) return
       newMap[i][j] = '#'
       if (findIfLoop(newMap)) numLoops++
