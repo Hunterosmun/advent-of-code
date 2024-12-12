@@ -18,22 +18,10 @@ const ex1 = `
 `
 
 function main(input) {
-  const grid = input
-    .trim()
-    .split('\n')
-    .map((line) => line.split(''))
-  const satelites = {}
-  grid.forEach((row, y) => {
-    row.forEach((cell, x) => {
-      if (cell !== '.') {
-        if (!satelites[cell]) satelites[cell] = []
-        satelites[cell].push({ x, y })
-      }
-    })
-  })
+  const [grid, satellites] = getGridAndSatellites(input)
   const triggeredAreas = {}
-  Object.keys(satelites).forEach((key) => {
-    const satelite = satelites[key]
+  Object.keys(satellites).forEach((key) => {
+    const satelite = satellites[key]
     satelite.map((sat, i) => {
       for (let a = i + 1; a < satelite.length; a++) {
         const other = satelite[a]
@@ -55,8 +43,63 @@ assert.strictEqual(main(ex1), 14)
 assert.strictEqual(main(santasList), 295)
 
 function partTwo(input) {
-  // stuff here
+  const [grid, satellites] = getGridAndSatellites(input)
+  const triggeredAreas = {}
+  Object.keys(satellites).forEach((key) => {
+    const satelite = satellites[key]
+    satelite.map((sat, i) => {
+      for (let a = i + 1; a < satelite.length; a++) {
+        const other = satelite[a]
+        triggeredAreas[`${sat.x},${sat.y}`] = true
+        triggeredAreas[`${other.x},${other.y}`] = true
+        const xDiff = sat.x - other.x
+        const yDiff = sat.y - other.y
+        let stillFindingThings = true
+        let offset = 1
+        do {
+          if (grid[sat.y + yDiff * offset]?.[sat.x + xDiff * offset]) {
+            triggeredAreas[
+              `${sat.x + xDiff * offset},${sat.y + yDiff * offset}`
+            ] = true
+            offset++
+          } else {
+            stillFindingThings = false
+          }
+        } while (stillFindingThings)
+        stillFindingThings = true
+        offset = 1
+        do {
+          if (grid[other.y - yDiff * offset]?.[other.x - xDiff * offset]) {
+            triggeredAreas[
+              `${other.x - xDiff * offset},${other.y - yDiff * offset}`
+            ] = true
+            offset++
+          } else {
+            stillFindingThings = false
+          }
+        } while (stillFindingThings)
+      }
+    })
+  })
+  return Object.keys(triggeredAreas).length
 }
 
-assert.strictEqual(partTwo(ex1), 'answer')
-assert.strictEqual(partTwo(santasList), 'answer')
+assert.strictEqual(partTwo(ex1), 34)
+assert.strictEqual(partTwo(santasList), 1034)
+
+function getGridAndSatellites(input) {
+  const grid = input
+    .trim()
+    .split('\n')
+    .map((line) => line.split(''))
+  const satellites = {}
+  grid.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (cell !== '.') {
+        if (!satellites[cell]) satellites[cell] = []
+        satellites[cell].push({ x, y })
+      }
+    })
+  })
+  return [grid, satellites]
+}
